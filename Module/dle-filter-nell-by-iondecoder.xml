@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dleplugin>
+	<name>DLE Filter nell by @iondecoder</name>
+	<description>Модуль фильтра новостей [ Nulled by ioncube decoder telega @iondecoder ]</description>
+	<icon></icon>
+	<version>1.2.7</version>
+	<dleversion>13</dleversion>
+	<versioncompare>greater</versioncompare>
+	<upgradeurl></upgradeurl>
+	<filedelete>0</filedelete>
+	<needplugin></needplugin>
+	<mnotice>0</mnotice>
+	<mysqlinstall><![CDATA[INSERT INTO `{prefix}_admin_sections` (`name`, `title`, `descr`, `icon`, `allow_groups`) VALUES ('dle_filter', 'DLE Filter', 'Настройка модуля фильтра новостей', '', '1');
+DELETE FROM `{prefix}_admin_sections` WHERE `name`='field_search';
+DROP TABLE IF EXISTS `{prefix}_filter_stat`;
+CREATE TABLE IF NOT EXISTS `{prefix}_dle_filter_statistics` (
+	`idFilter` int(10) NOT NULL AUTO_INCREMENT,
+	`dateFilter` datetime NOT NULL DEFAULT '2019-01-01 00:00:00',
+	`foundNews` tinyint(1) NOT NULL DEFAULT 0,
+	`ip` varchar(40) NOT NULL,
+	`queryNumber` smallint(2) NOT NULL,
+	`nick` varchar(40) NOT NULL,
+	`memoryUsage` double NOT NULL,
+	`mysqlTime` double NOT NULL,
+	`templateTime` double NOT NULL,
+	`statistics` mediumtext NOT NULL,
+  	`sqlQuery` text NOT NULL,
+  	`allTime` double NOT NULL,
+    PRIMARY KEY (`idFilter`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COMMENT='DLE Filter by lazydev.pro';
+CREATE TABLE IF NOT EXISTS `{prefix}_dle_filter_news` (
+    `filterId` int(11) NOT NULL AUTO_INCREMENT,
+    `newsId` int(11) NOT NULL,
+    UNIQUE KEY `filterId` (`filterId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS `{prefix}_dle_filter_news_temp` (
+    `tempId` int(11) NOT NULL AUTO_INCREMENT,
+    `newsId` int(11) NOT NULL,
+    `xfieldNew` mediumtext NOT NULL,
+    `allow_br` tinyint(1) NOT NULL DEFAULT '1',
+    UNIQUE KEY `tempId` (`tempId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;]]></mysqlinstall>
+	<mysqlupgrade><![CDATA[]]></mysqlupgrade>
+	<mysqlenable><![CDATA[]]></mysqlenable>
+	<mysqldisable><![CDATA[]]></mysqldisable>
+	<mysqldelete><![CDATA[DELETE FROM `{prefix}_admin_sections` WHERE `name`='dle_filter';
+DROP TABLE `{prefix}_dle_filter_statistics`;
+DROP TABLE `{prefix}_dle_filter_news`;
+DROP TABLE `{prefix}_dle_filter_news_temp`;
+DROP TRIGGER IF EXISTS filter_news_delete;
+DROP TRIGGER IF EXISTS filter_news_update;
+DROP TRIGGER IF EXISTS filter_news_insert;]]></mysqldelete>
+	<phpinstall><![CDATA[]]></phpinstall>
+	<phpupgrade><![CDATA[]]></phpupgrade>
+	<phpenable><![CDATA[]]></phpenable>
+	<phpdisable><![CDATA[]]></phpdisable>
+	<phpdelete><![CDATA[]]></phpdelete>
+	<notice><![CDATA[]]></notice>
+	<file name="engine/engine.php">
+		<operation action="after">
+			<searchcode><![CDATA[switch ( $do ) {]]></searchcode>
+			<replacecode><![CDATA[case 'dle_filter':
+	include ENGINE_DIR . '/lazydev/dle_filter/index.php';
+break;]]></replacecode>
+		</operation>
+	</file>
+	<file name="engine/modules/main.php">
+		<operation action="before">
+			<searchcode><![CDATA[echo $tpl->result['main'];]]></searchcode>
+			<replacecode><![CDATA[include ENGINE_DIR . '/lazydev/dle_filter/lib/dle_filter.if.php';]]></replacecode>
+		</operation>
+	</file>
+	<file name="engine/modules/functions.php">
+		<operation action="before">
+			<searchcode><![CDATA[if (isset($_GET['do']) AND $_GET['do'] == "tags") {]]></searchcode>
+			<replacecode><![CDATA[if (isset($_GET['do']) && $_GET['do'] == 'dle_filter') {
+	$f = html_entity_decode(urldecode($_GET['filter_data']), ENT_QUOTES, 'ISO-8859-1');
+
+	$count1 = substr_count($f, "'");
+	$count2 = substr_count($url, "'");
+
+	if ($count1 == $count2 && (strpos($url, '<') === false) && (strpos($url, '>') === false) && (strpos($url, '.php') === false)) {
+		return;
+	}
+}]]></replacecode>
+		</operation>
+	</file>
+</dleplugin>
